@@ -10,16 +10,16 @@ model_type: PINHOLE
 camera_name: camera
 image_width: 848
 image_height: 480
-distortion_parameters:  # TODO: Since the focal len has been changed, let's calibrate again
-   k1: -0.48926225
-   k2: 0.24427961
-   p1: 0.00315019
-   p2: 0.00157773
+distortion_parameters:
+   k1: -0.51846611
+   k2: 0.34635038
+   p1: 0.00174605
+   p2: 0.00017847
 projection_parameters:
-   fx: 872.7057452735113
-   fy: 870.4691806271561
-   cx: 409.09626491970903
-   cy: 249.45576412551657
+   fx: 885.01598439
+   fy: 883.41351974
+   cx: 407.65528812
+   cy: 239.21397021
 
 # Extrinsic parameter between IMU and Camera.
 estimate_extrinsic: 0   # 0  Have an accurate extrinsic parameters. We will trust the following imu^R_cam, imu^T_cam, don't change it.
@@ -58,7 +58,7 @@ extrinsicTranslation: !!opencv-matrix
 #   data: [-0.00029709, -0.00823162, -0.07548993]
 
 #feature tracker parameters
-max_cnt: 150            # max feature number in feature tracking
+max_cnt: 150            # max feature number in feature tracking TODO: 100 for first time (Jetson)
 min_dist: 30            # min distance between two features 
 freq: 20                # frequency (Hz) of publish tracking result. At least 10Hz for good estimation. If set 0, the frequency will be same as raw image
 F_threshold: 1.0        # ransac threshold (pixel)
@@ -72,14 +72,21 @@ max_num_iterations: 8   # max solver iterations, to guarantee real time
 keyframe_parallax: 10.0 # keyframe selection threshold (pixel)
 
 #imu parameters       The more accurate parameters you provide, the better performance
-acc_n: 0.04334389206191802          # accelerometer measurement noise standard deviation. #0.2 0.003064876
-gyr_n: 0.0019792625912192652         # gyroscope measurement noise standard deviation.     #0.05 0.000139955
-acc_w: 6.226271873858886e-04         # accelerometer bias random work noise standard deviation.  #0.02
-gyr_w: 1.0866894432315462e-05       # gyroscope bias random work noise standard deviation.     #4.0e-5
-g_norm: 9.81007     # gravity magnitude TODO
+acc_n: 0.001459514022762133          # accelerometer measurement noise standard deviation. #0.2 0.003064876
+gyr_n: 6.128256985013943e-05         # gyroscope measurement noise standard deviation.     #0.05 0.000139955
+acc_w: 0.004747373755651388         # accelerometer bias random work noise standard deviation.  #0.02
+gyr_w: 0.00026917600313040526       # gyroscope bias random work noise standard deviation.     #4.0e-5
+g_norm: 9.81007     # gravity magnitude
+
+#imu parameters       The more accurate parameters you provide, the better performance
+#acc_n: 0.04334389206191802          # accelerometer measurement noise standard deviation. #0.2 0.003064876
+#gyr_n: 0.0019792625912192652         # gyroscope measurement noise standard deviation.     #0.05 0.000139955
+#acc_w: 6.226271873858886e-04         # accelerometer bias random work noise standard deviation.  #0.02
+#gyr_w: 1.0866894432315462e-05       # gyroscope bias random work noise standard deviation.     #4.0e-5
+#g_norm: 9.81007     # gravity magnitude TODO
 
 #loop closure parameters
-loop_closure: 1                    # start loop closure
+loop_closure: 1                    # start loop closure TODO: Turn off for first time (Jetson)
 load_previous_pose_graph: 0        # load and reuse previous pose graph; load from 'pose_graph_save_path'
 fast_relocalization: 0             # useful in real-time and large project
 pose_graph_save_path: "/home/wfram/vins_mono_ws/src/output/pose_graph/" # save and load path
@@ -89,8 +96,8 @@ estimate_td: 0                      # online estimate time offset between camera
 td: 0.03356973236020965                             # initial value of time offset. unit: s. read image clock + td = real image clock (IMU clock) TODO
 
 #rolling shutter parameters
-rolling_shutter: 0                  # 0: global shutter camera, 1: rolling shutter camera
-rolling_shutter_tr: 0               # unit: s. rolling shutter read out time per frame (from data sheet). 
+rolling_shutter: 1                  # 0: global shutter camera, 1: rolling shutter camera
+rolling_shutter_tr: 0.05               # unit: s. rolling shutter read out time per frame (from data sheet).
 
 #visualization parameters
 save_image: 1                   # save image in pose graph for visualization purpose; you can close this function by setting 0
